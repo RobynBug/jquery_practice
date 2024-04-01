@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap/dist/css/bootstrap.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        background-color: rgb(255, 251, 244);
+      }
+      .container {
+        display: block;
+      }
+      h1 {
+        text-align: center;
+        margin: 5%;
+      }
+      form {
+        display: grid;
+        justify-content: space-around;
+      }
+      datalist {
+        display: flex;
+        justify-content: space-between;
+        width: 200px;
+      }
+      .range {
+        width: 200px;
+      }
+
+      .input-headings {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .input-headings h2 {
+        width: 100%;
+      }
+
+      .input1 {
+        grid-column: 2/3;
+      }
+
+      .input2 {
+        grid-column: 5/6;
+      }
+
+      .text {
+        min-width: 200px;
+        border: 3px solid darkolivegreen;
+        background-color: rgb(249, 246, 228);
+        margin-bottom: 2rem;
+      }
+      .submitBtn {
+        width: 100%;
+      }
+
+      button[type="submit"] {
+        margin: 2rem 2rem;
+        min-width: 8rem;
+        height: 2rem;
+      }
+
+      .movieItems {
+        display: flex;
+        padding: 4rem;
+      }
+
+      section {
+        width: 30%;
+        background-color: rgb(181, 181, 5);
+        border: 3px solid darkolivegreen;
+        border-radius: 1rem;
+        margin: 1rem;
+        padding: 1rem;
+      }
+
+      p, strong {
+        background-color: rgb(181, 181, 5);
+        font-size: 1.2rem;
+      }
+      .delete {
+        width: 6rem;
+        font-size: 1.2rem;
+      }
+
+      .sort {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Movie Ratings</h1>
+      </header>
+
+      <form>
+        <label
+          >Movie Title
+          <br />
+          <input type="text" class="text" />
+        </label>
+        <div class="range_input">
+          <label>
+            Movie Rating
+            <br />
+            <input
+              type="range"
+              class="range"
+              min="1"
+              max="10"
+              list="numbers"
+              id="range"
+              value="1"
+            />
+            <datalist id="numbers">
+              <option value="1" label="1"></option>
+              <option value="2" label="2"></option>
+              <option value="3" label="3"></option>
+              <option value="4" label="4"></option>
+              <option value="5" label="5"></option>
+              <option value="6" label="6"></option>
+              <option value="7" label="7"></option>
+              <option value="8" label="8"></option>
+              <option value="9" label="9"></option>
+              <option value="10" label="10"></option>
+            </datalist>
+          </label>
+          <br />
+        </div>
+        <div class="submitBtn">
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+      <form class="sort">
+      <label for="alphaSort">Sort by Movie
+      <input type="radio" class="radio" id="alphaSort">
+    </label>
+    <label for="ratingSort">Sort by Rating
+      <input type="radio" class="radio" id="ratingSort">
+    </label>
+</form>
+    </div>
+    <div class="movieItems"></div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("button").click(function (event) {
+          event.preventDefault();
+
+          if ($(".text").val().length >= 2) {
+            let title = $(".text").val();
+            let rating = $(".range").val();
+            $(".movieItems").append(
+              `<section> <p>Movie Title: <strong>${title}</strong></p> <p>Movie Rating: ${rating}</p> <button class="delete">Delete</button> </section>`
+            );
+            $(".text").val("");
+            $(".range").val("1");
+          }
+          else {
+            alert("Please enter a valid movie title.");
+          }
+        });
+
+        $('.movieItems').on('click', '.delete', function() {
+        $(this).closest('section').remove();
+    });
+      });
+    </script>
+  </body>
+</html>
