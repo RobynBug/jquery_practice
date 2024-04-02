@@ -61,18 +61,26 @@
       }
 
       button[type="submit"] {
+        background-color: rgb(181, 181, 5);
         margin: 2rem 2rem;
         min-width: 8rem;
         height: 2rem;
       }
 
       .movieItems {
-        display: flex;
-        padding: 4rem;
+        width: 80%;
+        margin: 4rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-flow: row;
+        grid-gap: 1rem 4rem;
+        justify-content: space-between;
+        
       }
 
       section {
-        width: 30%;
+        max-width: 20rem;
+        min-width: 20rem;
         background-color: rgb(181, 181, 5);
         border: 3px solid darkolivegreen;
         border-radius: 1rem;
@@ -80,7 +88,8 @@
         padding: 1rem;
       }
 
-      p, strong {
+      p,
+      strong {
         background-color: rgb(181, 181, 5);
         font-size: 1.2rem;
       }
@@ -89,8 +98,19 @@
         font-size: 1.2rem;
       }
 
-      .sort {
+      p {
+        min-height: 2rem;
+        max-height: 2rem;
+        
+      }
+
+      .filter {
         display: flex;
+      }
+      button:hover {
+        background-color: rgb(172, 172, 4);
+        font-weight: bold;
+        box-shadow: 2px 2px 2px darkolivegreen;
       }
     </style>
   </head>
@@ -138,14 +158,16 @@
           <button type="submit">Submit</button>
         </div>
       </form>
-      <form class="sort">
-      <label for="alphaSort">Sort by Movie
-      <input type="radio" class="radio" id="alphaSort">
-    </label>
-    <label for="ratingSort">Sort by Rating
-      <input type="radio" class="radio" id="ratingSort">
-    </label>
-</form>
+      <form class="filter">
+        <label for="alphaSort"
+          >Sort by Movie Title
+          <input type="radio" id="alphaSort" name="sort" value="title"/>
+        </label>
+        <label for="ratingSort"
+          >Sort by Movie Rating
+          <input type="radio" id="ratingSort" name="sort" value="rating" />
+        </label>
+      </form>
     </div>
     <div class="movieItems"></div>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -162,15 +184,42 @@
             );
             $(".text").val("");
             $(".range").val("1");
-          }
-          else {
+          } else {
             alert("Please enter a valid movie title.");
           }
         });
 
-        $('.movieItems').on('click', '.delete', function() {
-        $(this).closest('section').remove();
-    });
+        $(".movieItems").on("click", ".delete", function () {
+          $(this).closest("section").remove();
+        });
+        $(".filter").on("change", 'input[name="sort"]', function () {
+          let sortBy = $(this).val();
+          sortMovies(sortBy);
+        });
+        function sortMovies(sortBy) {
+          let movieItems = $(".movieItems").children("section").toArray();
+
+          movieItems.sort(function (a, b) {
+            let aValue, bValue;
+
+            if (sortBy === "title") {
+              aValue = $(a).find("strong").text();
+              bValue = $(b).find("strong").text();
+            } else if (sortBy === "rating") {
+              aValue = parseInt(
+                $(a).find("p").eq(1).text().split(":")[1].trim()
+              );
+              bValue = parseInt(
+                $(b).find("p").eq(1).text().split(":")[1].trim()
+              );
+            }
+
+            if (aValue < bValue) return -1;
+            if (aValue > bValue) return 1;
+            return 0;
+          });
+          $(".movieItems").empty().append(movieItems);
+        }
       });
     </script>
   </body>
